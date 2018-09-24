@@ -2,6 +2,7 @@ package ca.mcgill.ecse211.lab2;
 
 import java.text.DecimalFormat;
 import ca.mcgill.ecse211.odometer.Odometer;
+import ca.mcgill.ecse211.odometer.OdometryCorrection;
 import ca.mcgill.ecse211.odometer.OdometerExceptions;
 import lejos.hardware.lcd.TextLCD;
 
@@ -57,6 +58,8 @@ public class Display implements Runnable {
       lcd.drawString("X: " + numberFormat.format(position[0]), 0, 0);
       lcd.drawString("Y: " + numberFormat.format(position[1]), 0, 1);
       lcd.drawString("T: " + numberFormat.format(position[2]), 0, 2);
+      lcd.drawString("L: " + Float.toString(OdometryCorrection.getLightData()[0]), 0, 3);
+      lcd.drawString("Line count: " + OdometryCorrection.getLineCount(), 0, 4);
       
       // this ensures that the data is updated only once every period
       updateEnd = System.currentTimeMillis();

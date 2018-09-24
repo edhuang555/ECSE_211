@@ -3,6 +3,7 @@ package ca.mcgill.ecse211.lab2;
 
 import ca.mcgill.ecse211.odometer.*;
 import lejos.hardware.Button;
+import lejos.hardware.Sound;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.TextLCD;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
@@ -21,7 +22,7 @@ public class Lab2 {
       new EV3LargeRegulatedMotor(LocalEV3.get().getPort("B"));
   private static final TextLCD lcd = LocalEV3.get().getTextLCD();
   public static final double WHEEL_RAD = 2.1;
-  public static final double TRACK = 12.8;
+  public static final double TRACK = 12.55; //12.6
   
   private static final Port lsPort = LocalEV3.get().getPort("S1");
   static SensorModes lightSensor = new EV3ColorSensor(lsPort); // usSensor is the instance
@@ -64,13 +65,16 @@ public class Lab2 {
       // Display changes in position as wheels are (manually) moved
       
       Thread odoThread = new Thread(odometer);
-      //odoThread.start();
+      odoThread.start();
       Thread odoDisplayThread = new Thread(odometryDisplay);
-      //odoDisplayThread.start();
-      lcd.clear();
+      odoDisplayThread.start();
       while(true){
     	  lightIntensity.fetchSample(lsData, 0);
-    	  lcd.drawString(Float.toString(lsData[0]), 0, 0);
+    	  lcd.drawString(Float.toString(lsData[0]), 0, 3);
+          if(lsData[0] < 0.4){ //check if difference between current and last reading > 0.2
+        	  //beep if line detected
+        	  Sound.beep();
+          }
       }
 
     } else {
